@@ -2,7 +2,36 @@
  * Create a list that holds all of your cards
  */
 
+ //创建卡片对象
+var Card =  {
+   name : '',
+   state : 'noth',
+   createNew: function() {
+   　　　　　　var card = {};
+   　　　　　　Card.show = function(){ Cat.state = 'show' };
+   　　　　　　Card.hide = function(){ Cat.state = 'hide'};
+   　　　　　　return card;
+ }
+}
 
+//创建卡牌对象数组
+
+var cards_name = ['fa-diamond','fa-diamond',
+ 'fa-paper-plane-o','fa-paper-plane-o',
+ 'fa-anchor','fa-anchor',
+ 'fa-bolt','fa-bolt',
+ 'fa-cube','fa-cube',
+ 'fa-leaf','fa-leaf',
+ 'fa-bicycle','fa-bicycle',
+ 'fa-bomb','fa-bomb'];
+
+
+var cards_all =  Array();
+
+for(var i = 0; i < cards_name.length; i++){
+  cards_all[i] = Card.createNew();
+  cards_all[i].name = cards_name[i];
+}
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -24,6 +53,15 @@ function shuffle(array) {
 
     return array;
 }
+shuffle(cards_all);
+
+
+var str = '';
+for (var i = 0; i < cards_all.length;i++){
+	str += '<li class = \"card\"><i class=\"fa ' + cards_all[i].name + '\"></i></li>';
+}
+console.log(str);
+$(".deck").html(str);
 
 
 /*
@@ -36,3 +74,35 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+ var open_card = [];//翻开的卡牌数组，长度始终为2
+
+ $(document).ready(function(){
+   $(".card").click(function(){
+     if (open_card.length < 2){
+       if($(this).attr("class").indexOf("open show") == -1) {
+         open_card.push($(this).children().attr("class"));
+         $(this).addClass("open show");
+         console.log(open_card[0],open_card[1])
+         if(open_card.length == 2){
+           setTimeout(
+             function (){
+               if (open_card[0] != open_card[1]){
+                 $(".card.open.show").removeClass("open show");
+                 console.log('diff');
+               }
+               else {
+                  $(".card.open.show").removeClass("open show").addClass("match");
+                  if($(".match").size() == 16){
+                    alert('You Win!');
+                    location.replace(location.href);
+                  }
+               }
+               open_card.splice(0,open_card.length);
+             }
+             ,500);
+         }
+       }
+     }
+   });
+ });
