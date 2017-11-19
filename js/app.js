@@ -76,11 +76,22 @@ $(".deck").html(str);
  */
 
  var open_card = [];//翻开的卡牌数组，长度始终为2
+ var counter = 0;//初始化计次器
+ var intr;
+ var hour,minute,second;//时 分 秒
+ hour=minute=second=0;//初始化
+ var millisecond=0;//毫秒
 //核心功能实现
  $(document).ready(function(){
    //主要功能的实现，点击卡牌之后即翻面，点击第二张之后进行判断是否一致，如果一致则标记为martch，如果不一致则两张卡牌均回到初始状态
    $(".card").click(function(){
      if (open_card.length < 2){
+       counter++;
+       $(".moves").html(counter.toString());
+       //第一次点击
+       if(counter == 1){
+         intr = setInterval(timer,50);
+       }
        if($(this).attr("class").indexOf("open show") == -1 && $(this).attr("class").indexOf("match") == -1) {
          open_card.push($(this).children().attr("class"));
          $(this).addClass("open show");
@@ -95,6 +106,7 @@ $(".deck").html(str);
                else {
                   $(".card.open.show").removeClass("open show").addClass("match");
                   if($(".match").size() == 16){
+                    intr = window.clearInterval(intr);
                     alert('You Win!');
                     location.replace(location.href);
                   }
@@ -111,3 +123,32 @@ $(".deck").html(str);
      location.replace(location.href);
    });
  });
+
+ function timer()//计时
+ {
+    millisecond=millisecond+50;
+    if(millisecond>=1000)
+    {
+        millisecond=0;
+        second=second+1;
+    }
+    if(second>=60)
+    {
+        second=0;
+        minute=minute+1;
+    }
+
+    if(minute>=60)
+    {
+        minute=0;
+        hour=hour+1;
+    }
+    $(".clock").html('计时: '+hour+'时'+minute+'分'+second+'秒'+millisecond+'毫秒');
+    //星级展示，小于18次3星，点击超过18次2星，超过36次1星
+    if( counter > 36) {
+      $(".stars").html('<li><i class="fa fa-star"></i></li>');
+    }
+    else if( counter > 18) {
+           $(".stars").html('<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>');
+    }
+  }
