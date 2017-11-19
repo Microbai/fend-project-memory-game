@@ -76,8 +76,9 @@ $(".deck").html(str);
  */
 
  var open_card = [];//翻开的卡牌数组，长度始终为2
-
+//核心功能实现
  $(document).ready(function(){
+   //主要功能的实现，点击卡牌之后即翻面，点击第二张之后进行判断是否一致，如果一致则标记为martch，如果不一致则两张卡牌均回到初始状态
    $(".card").click(function(){
      if (open_card.length < 2){
        if($(this).attr("class").indexOf("open show") == -1 && $(this).attr("class").indexOf("match") == -1) {
@@ -104,5 +105,9 @@ $(".deck").html(str);
          }
        }
      }
+   });
+   //重新玩游戏
+   $(".restart").click(function(){
+     location.replace(location.href);
    });
  });
