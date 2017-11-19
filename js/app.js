@@ -80,7 +80,7 @@ $(".deck").html(str);
  $(document).ready(function(){
    $(".card").click(function(){
      if (open_card.length < 2){
-       if($(this).attr("class").indexOf("open show") == -1) {
+       if($(this).attr("class").indexOf("open show") == -1 && $(this).attr("class").indexOf("match") == -1) {
          open_card.push($(this).children().attr("class"));
          $(this).addClass("open show");
          console.log(open_card[0],open_card[1])
