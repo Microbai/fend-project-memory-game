@@ -110,8 +110,10 @@ $(".deck").html(str);
                   $(".card.open.show").removeClass("open show").addClass("match");
                   if($(".match").size() == 16){
                     intr = window.clearInterval(intr);
-                    alert('You Win!');
-                    location.replace(location.href);
+                    setTimeout(
+                      function (){
+                        alert('You Win!');
+                      },1000);
                   }
                }
                setTimeout(
