@@ -85,6 +85,8 @@ $(".deck").html(str);
  $(document).ready(function(){
    //主要功能的实现，点击卡牌之后即翻面，点击第二张之后进行判断是否一致，如果一致则标记为martch，如果不一致则两张卡牌均回到初始状态
    $(".card").click(function(){
+     $(this).animate({"width":"135","height":"135"},100);
+     $(this).animate({"width":"125","height":"125"},100);
      if (open_card.length < 2){
        counter++;
        $(".moves").html(counter.toString());
@@ -97,13 +99,14 @@ $(".deck").html(str);
          $(this).addClass("open show");
          console.log(open_card[0],open_card[1])
          if(open_card.length == 2){
-           setTimeout(
-             function (){
-               if (open_card[0] != open_card[1]){
-                 $(".card.open.show").removeClass("open show");
-                 console.log('diff');
-               }
-               else {
+           if (open_card[0] != open_card[1]){
+                 $(".card.open.show").addClass('nomatch');
+                 setTimeout(
+                   function (){
+                     $(".card.open.show").removeClass("open show nomatch");
+                   },500);
+                 }
+                 else {
                   $(".card.open.show").removeClass("open show").addClass("match");
                   if($(".match").size() == 16){
                     intr = window.clearInterval(intr);
@@ -111,13 +114,16 @@ $(".deck").html(str);
                     location.replace(location.href);
                   }
                }
-               open_card.splice(0,open_card.length);
+               setTimeout(
+                 function (){
+                   open_card.splice(0,open_card.length);
+                 },500);
+
              }
-             ,500);
+
          }
        }
-     }
-   });
+     });
    //重新玩游戏
    $(".restart").click(function(){
      location.replace(location.href);
