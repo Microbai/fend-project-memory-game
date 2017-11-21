@@ -58,7 +58,7 @@ shuffle(cards_all);
 
 var str = '';
 for (var i = 0; i < cards_all.length;i++){
-	str += '<li class = \"card\"><i class=\"fa ' + cards_all[i].name + '\"></i></li>';
+  str += `<li class = "card"><i class="fa ${cards_all[i].name}"></i></li>`;
 }
 console.log(str);
 $(".deck").html(str);
@@ -81,24 +81,29 @@ $(".deck").html(str);
  var hour,minute,second;//时 分 秒
  hour=minute=second=0;//初始化
  var millisecond=0;//毫秒
+ var star = 3;
 //核心功能实现
  $(document).ready(function(){
    //主要功能的实现，点击卡牌之后即翻面，点击第二张之后进行判断是否一致，如果一致则标记为martch，如果不一致则两张卡牌均回到初始状态
    $(".card").click(function(){
      $(this).animate({"width":"135","height":"135"},100);
      $(this).animate({"width":"125","height":"125"},100);
+
      if (open_card.length < 2){
        counter++;
        $(".moves").html(counter.toString());
        //第一次点击
-       if(counter == 1){
+       if(counter === 1){
          intr = setInterval(timer,50);
        }
+
        if($(this).attr("class").indexOf("open show") == -1 && $(this).attr("class").indexOf("match") == -1) {
          open_card.push($(this).children().attr("class"));
          $(this).addClass("open show");
          console.log(open_card[0],open_card[1])
-         if(open_card.length == 2){
+
+         if(open_card.length === 2){
+
            if (open_card[0] != open_card[1]){
                  $(".card.open.show").addClass('nomatch');
                  setTimeout(
@@ -108,11 +113,15 @@ $(".deck").html(str);
                  }
                  else {
                   $(".card.open.show").removeClass("open show").addClass("match");
+
                   if($(".match").size() == 16){
                     intr = window.clearInterval(intr);
                     setTimeout(
                       function (){
-                        alert('You Win!');
+                        con = confirm("你赢啦，真厉害，你的星级为" + star.toString() + " 完成时间为"+ $(".clock").html() +"点击确定重新进行游戏哦~");
+                        if(con === true){
+                          location.replace(location.href);
+                        }
                       },1000);
                   }
                }
@@ -135,11 +144,13 @@ $(".deck").html(str);
  function timer()//计时
  {
     millisecond=millisecond+50;
+
     if(millisecond>=1000)
     {
         millisecond=0;
         second=second+1;
     }
+
     if(second>=60)
     {
         second=0;
@@ -155,8 +166,10 @@ $(".deck").html(str);
     //星级展示，小于18次3星，点击超过18次2星，超过36次1星
     if( counter > 36) {
       $(".stars").html('<li><i class="fa fa-star"></i></li>');
+      star = 1;
     }
     else if( counter > 18) {
            $(".stars").html('<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>');
+           star = 2;
     }
   }
